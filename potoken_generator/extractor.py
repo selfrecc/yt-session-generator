@@ -78,7 +78,12 @@ class PotokenExtractor:
             potoken = post_data_json['serviceIntegrityDimensions']['poToken']
         except (json.JSONDecodeError, TypeError, KeyError) as e:
             logger.warning(f'failed to extract token from request: {type(e)}, {e}')
-            return None
+            #return None
+            logger.warning('using static prefetched tokens')
+            with open('TOKEN', 'r') as TOKENFILE:
+                TOKENFILELINES = TOKENFILE.readlines()
+            visitor_data = TOKENFILELINES[0].rstrip()
+            po_token = TOKENFILELINES[1].rstrip()
         token_info = TokenInfo(
             updated=int(time.time()),
             potoken=potoken,
