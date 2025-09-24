@@ -16,9 +16,15 @@ logger = logging.getLogger('potoken')
 def print_token_and_exit(token_info: Optional[TokenInfo]):
     if token_info is None:
         logger.warning('failed to extract token')
-        sys.exit(1)
-    visitor_data = token_info.visitor_data
-    po_token = token_info.potoken
+        #sys.exit(1)
+        logger.warning('using static prefetched tokens')
+        with open('TOKEN', 'r') as TOKENFILE:
+            TOKENFILELINES = TOKENFILE.readlines()
+        visitor_data = TOKENFILELINES[0].rstrip()
+        po_token = TOKENFILELINES[1].rstrip()
+    if not token_info is None:
+        visitor_data = token_info.visitor_data
+        po_token = token_info.potoken
 
     print('visitor_data: ' + visitor_data)
     print('po_token: ' + po_token)
